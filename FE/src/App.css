@@ -30,6 +30,7 @@
   padding: 1em;
   color: white;
   float: right;
+;
 }
 
 .other-people {
@@ -123,14 +124,37 @@ textarea:focus {
   border-radius: 1em;
   padding: 1em;
   color: rgb(122, 122, 122);
-  translate: calc((250px));
+  translate: calc((300px));
 }
+
 .hide {
   display: none;
 }
-.your-message:hover  .hide {
+
+.your-message:hover .hide {
   display: block;
   color: rgb(140, 140, 143);
   transition-property: inherit;
+}
+
+/* .chat-item-img {
+  width: 50%;
 
 }
+
+.box-chat_message .your-message-img {
+  display: flex;
+  align-items: flex-end;
+  margin: 1em;
+  color: white;
+  float: right;
+  transform: translateX(375px);
+}
+
+.other-people-img {
+
+  margin: 1em;
+  color: white;
+  text-align: left;
+  float: left;
+} */

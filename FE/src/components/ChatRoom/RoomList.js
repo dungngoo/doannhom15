@@ -24,7 +24,7 @@ const WrapperStyled = styled.div`
 `;
 
 export default function RoomList({ lastMsg, setLastMsg, chats, setChats,
-  userinRoom, setUsersInRoom, createBy, setCreateBy, tempUser, setTempUser }) {
+  userinRoom, setUsersInRoom, createBy, setCreateBy, tempUser, setTempUser, receiver, setReceiver }) {
   const token = localStorage.getItem("token");
   const myid = localStorage.getItem("myid");
   const navigate = useNavigate();
@@ -50,13 +50,14 @@ export default function RoomList({ lastMsg, setLastMsg, chats, setChats,
           chatsObj[`${element.id}`] = "";
         });
         setLastMsg(chatsObj);
+
       })
       .catch((err) => console.error(err));
   }, []);
   const roomOnClick = (e, chat) => {
     var chatId = chat.id;
     setCreateBy(chat.createBy);
-    let receiver = chat.receiver?.name
+    receiver = chat.receiver?.name
     fetch(`${config.BE_URL}/chats/${chatId}`, {
       headers: {
         token: token,
@@ -117,11 +118,13 @@ export default function RoomList({ lastMsg, setLastMsg, chats, setChats,
                 text={
                   lastMsg[`${chat.id}`] !== ""
                     ? lastMsg[`${chat.id}`]
-                    : (chat.lastMessage.content ? chat.lastMessage.content : "Tin nhắn đã được thu hồi")
+                    : (chat.lastMessage.type !== 1 ? (chat.lastMessage.content ? chat.lastMessage.content : "Tin nhắn đã được thu hồi") : "Hình ảnh")
                 }
+
                 photoURL={null}
                 username={
-                  (chat.chatName !== "" && chat.chatName !== undefined) ? chat.chatName : chat.receiver.name
+                  (chat.chatName !== "" && chat.chatName !== undefined) ? chat.chatName : (
+                    localStorage.getItem("myid") === chat.receiver.id ? chat.lastMessage.sender.name : chat.receiver.name)
                 }
               />
             </div>

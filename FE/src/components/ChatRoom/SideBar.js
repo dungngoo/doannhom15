@@ -36,7 +36,8 @@ const AvatarStyled = styled.div`
 export default function SignBar({ lastMsg, setLastMsg, setChats, chats, socketRef,
     setFlag, flag, newlist, setNewList
     , listid, setListId, user, setUser, userinRoom, setUsersInRoom
-    , userdisabled, setUserDisabled, createBy, setCreateBy, tempUser, setTempUser, newChat, setnewChat,setChatFlag, chatFlag }) {
+    , userdisabled, setUserDisabled, createBy, setCreateBy, tempUser, setTempUser, newChat, setnewChat, setChatFlag, chatFlag
+    , receiver, setReceiver }) {
 
     return (
         <SideBarStyled>
@@ -47,7 +48,8 @@ export default function SignBar({ lastMsg, setLastMsg, setChats, chats, socketRe
             <Col span={24}>
                 <RoomList lastMsg={lastMsg} setLastMsg={setLastMsg} setChats={setChats} chats={chats} userinRoom={userinRoom}
                     setUsersInRoom={setUsersInRoom} createBy={createBy}
-                    setCreateBy={setCreateBy} tempUser={tempUser} setTempUser={setTempUser} />
+                    setCreateBy={setCreateBy} tempUser={tempUser} setTempUser={setTempUser}
+                    receiver={receiver} setReceiver={setReceiver} />
             </Col>
             <AvatarStyled>
                 <Row>

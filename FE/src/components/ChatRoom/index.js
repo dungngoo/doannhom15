@@ -5,7 +5,7 @@ import ChatWindow from "../ChatRoom/ChatWindow";
 import SignBar from "../ChatRoom/SideBar";
 import Login from "../LoginPage";
 import { io } from "socket.io-client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { config } from "../../config";
 
 const ServerURL = "http://localhost:9090";
@@ -35,7 +35,8 @@ export default function ChatRoom() {
   const [message, setMessage] = useState([]);
   const navigate = useNavigate();
   const [chatFlag, setChatFlag] = useState(false);
-
+  const [receiver, setReceiver] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (!token) {
@@ -69,6 +70,7 @@ export default function ChatRoom() {
     socketRef.current.on("User-Create-Chat", (data) => {
       {
         console.log(data);
+
         ////////// Lần thứ 2 trở đi //////////////
         setChats((oldChat) => !oldChat ? [data] : [data, ...oldChat]);
         // if (data.chatName) {
@@ -81,8 +83,6 @@ export default function ChatRoom() {
       // Leave group return chatId ==> call API ==> chat ==> setChat
       console.log(data);
       setChatIdRemove(data.chatId);
-      // console.log(AChat);
-      // console.log(BChat);
       navigate("/");
     })
     socketRef.current.on("User-Recall-Message", (data) => {
@@ -103,6 +103,7 @@ export default function ChatRoom() {
   }, [chatIdRemove])
 
   useEffect(() => {
+
     console.log(message);
     const m = message.filter(mes => mes.id === messageId);
     console.log(m);
@@ -110,11 +111,11 @@ export default function ChatRoom() {
     m[0]["content"] = "Tin nhắn đã được thu hồi";
     setMessage((oldMsg) => [...oldMsg, m]);
     m[0]["content"] = null;
-    if (lastMsg !== m) return;
     setLastMsg((oldLastMsg) => ({
       ...oldLastMsg,
       [m[0].chatId]: "Tin nhắn đã được thu hồi",
     }));
+
   }, [messageId])
 
 
@@ -141,7 +142,7 @@ export default function ChatRoom() {
           userinRoom={userinRoom} setUsersInRoom={setUsersInRoom} userdisabled={userdisabled}
           setUserDisabled={setUserDisabled} createBy={createBy}
           setCreateBy={setCreateBy} tempUser={tempUser} setTempUser={setTempUser} newChat={newChat}
-          chatFlag={chatFlag} setChatFlag={setChatFlag}
+          chatFlag={chatFlag} setChatFlag={setChatFlag} receiver={receiver} setReceiver={setReceiver}
 
         />
       </Col>

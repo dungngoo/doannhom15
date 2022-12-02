@@ -165,7 +165,6 @@ export default function ChatWindow({ lastMsg, setLastMsg, chats, setChats, setne
       .then((data) => {
         console.log(data);
         chatId = data.payload.id;
-        // setChats((oldChat)=> [data.payload,...oldChat]);
         navigate(`/?chatId=${chatId}&receiver=${receiver}`)
         setFlag(true);
         sendMessage();
@@ -206,10 +205,18 @@ export default function ChatWindow({ lastMsg, setLastMsg, chats, setChats, setne
       return;
     }
     setMessage((oldMsg) => [...oldMsg, newMsg]);
+    if (newMsg.type === 1) {
+      setLastMsg((oldLastMsg) => ({
+        ...oldLastMsg,
+        [newMsg.chatId]: "Hình ảnh",
+      }));
+      return;
+    }
     setLastMsg((oldLastMsg) => ({
       ...oldLastMsg,
       [newMsg.chatId]: newMsg.content,
     }));
+
   }, [newMsg]);
 
   useEffect(() => {
@@ -309,7 +316,7 @@ export default function ChatWindow({ lastMsg, setLastMsg, chats, setChats, setne
               <HeaderContentStyled>
                 <p className="header-username">{receiver}</p>
                 <span className="header-description">
-                  {showAddmember === "1" && <div>Số lượng thành viên:{tempUser}</div>}
+                  {showAddmember === "1" && <div>{tempUser} thành viên</div>}
                 </span>
                 <BorderStyled />
               </HeaderContentStyled>
@@ -346,7 +353,7 @@ export default function ChatWindow({ lastMsg, setLastMsg, chats, setChats, setne
                     if (chatId === m.chatId) {
                       return (
                         <>
-
+                          {/* {m.type !== 1 && */}
                           <div
                             key={index}
                             className={`${(m.type === 2 || m.type === 3) ? "NotifyMessage" :
@@ -358,9 +365,9 @@ export default function ChatWindow({ lastMsg, setLastMsg, chats, setChats, setne
                             <div className="message" style={{ width: "75%" }}
                             >
                               <div style={{ color: "black", fontWeight: "bold" }}>
-                                {localStorage.getItem("myid") !== m.sender?.id ? m.type === 0 && m.sender.name : null}
+                                {showAddmember === "1" && localStorage.getItem("myid") !== m.sender?.id ? m.type === 0 && m.sender.name : null}
                               </div>
-                              <div > {m.content ? m.content : "Tin nhắn đã được thu hồi"}</div>
+                              <div >  {m.type !== 1 ? (m.content ? m.content : "Tin nhắn đã được thu hồi") : <img src={m.content}></img>}</div>
                             </div>
 
                             {m.content && <div style={{ width: "25%", height: "25px", transform: "translateX(-450px)" }}
@@ -368,6 +375,30 @@ export default function ChatWindow({ lastMsg, setLastMsg, chats, setChats, setne
                                 onClick={() => HandleClick(m.id)} /></div>}
 
                           </div>
+                          {/* } */}
+                          {/* {
+                            m.type === 1 && <div
+                              key={index}
+                              className={`${(m.type === 2 || m.type === 3) ? "NotifyMessage" :
+                                `${m.sender?.id === myid ? "your-message" : "other-people"
+                                } chat-item `}`}
+                              style={{ cursor: "pointer" }}
+                            >
+
+                              <div className="message" style={{ width: "75%" }}
+                              >
+                                <div style={{ color: "black", fontWeight: "bold" }}>
+                                  {showAddmember === "1" && localStorage.getItem("myid") !== m.sender?.id ? m.type === 0 && m.sender.name : null}
+                                </div>
+                                <img src={m.content} onClick={() => (window.open(m.content))}></img>
+                              </div>
+
+                              {m.content && <div style={{ width: "25%", height: "25px", transform: "translateX(-450px)" }}
+                                className="hide"><RiArrowGoBackLine style={{ height: "30px", width: "30px" }}
+                                  onClick={() => HandleClick(m.id)} /></div>}
+
+                            </div>
+                          } */}
                         </>
                       );
                     }
