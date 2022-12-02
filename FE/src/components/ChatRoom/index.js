@@ -110,6 +110,7 @@ export default function ChatRoom() {
     m[0]["content"] = "Tin nhắn đã được thu hồi";
     setMessage((oldMsg) => [...oldMsg, m]);
     m[0]["content"] = null;
+    if (lastMsg !== m) return;
     setLastMsg((oldLastMsg) => ({
       ...oldLastMsg,
       [m[0].chatId]: "Tin nhắn đã được thu hồi",

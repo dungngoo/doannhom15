@@ -130,5 +130,7 @@ textarea:focus {
 }
 .your-message:hover  .hide {
   display: block;
-  color: rgb(140, 140, 143)
+  color: rgb(140, 140, 143);
+  transition-property: inherit;
+
 }

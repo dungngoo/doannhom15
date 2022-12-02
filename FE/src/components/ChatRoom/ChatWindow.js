@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { Avatar, Form } from "antd";
+import { Avatar, Form, Input } from "antd";
 import styled from "styled-components";
 import { AiTwotoneAudio } from "react-icons/ai";
 import { BsFillCursorFill } from "react-icons/bs";
@@ -13,6 +13,7 @@ import Addmember from "../Group/Addmember";
 import Popup from "reactjs-popup";
 import { RiArrowGoBackLine } from "react-icons/ri";
 import Posts from "./Post";
+import { Text } from "@chakra-ui/react";
 
 
 const ServerURL = "http://localhost:9090";
@@ -283,8 +284,6 @@ export default function ChatWindow({ lastMsg, setLastMsg, chats, setChats, setne
   }
 
   const HandleClick = async (message) => {
-    if (!text) return;
-    if (!text.trim()) return;
     const messageId = message;
     await socketRef.current.emit("User-Recall-Message", { messageId });
     console.log("Thanhf coong");
@@ -339,7 +338,7 @@ export default function ChatWindow({ lastMsg, setLastMsg, chats, setChats, setne
           </HeaderStyled>
 
           <ContentStyled>
-            <div className="box-chat">
+            <div className="box-chat" style={{ paddingBottom: "5px" }}>
               <div className="box-chat_message">
                 {/* {renderMess}   */}
                 {message &&
@@ -347,16 +346,21 @@ export default function ChatWindow({ lastMsg, setLastMsg, chats, setChats, setne
                     if (chatId === m.chatId) {
                       return (
                         <>
+
                           <div
                             key={index}
                             className={`${(m.type === 2 || m.type === 3) ? "NotifyMessage" :
                               `${m.sender?.id === myid ? "your-message" : "other-people"
                               }`} chat-item `}
                             style={{ cursor: "pointer" }}
-
                           >
+
                             <div className="message" style={{ width: "75%" }}
-                            > {m.content ? m.content : "Tin nhắn đã được thu hồi"}
+                            >
+                              <div style={{ color: "black", fontWeight: "bold" }}>
+                                {localStorage.getItem("myid") !== m.sender?.id ? m.type === 0 && m.sender.name : null}
+                              </div>
+                              <div > {m.content ? m.content : "Tin nhắn đã được thu hồi"}</div>
                             </div>
 
                             {m.content && <div style={{ width: "25%", height: "25px", transform: "translateX(-450px)" }}
@@ -375,18 +379,19 @@ export default function ChatWindow({ lastMsg, setLastMsg, chats, setChats, setne
 
             <FormStyled style={{ height: "40px", padding: "5px" }}>
               <Posts style={{ cursor: "pointer" }} onChange={() => ImageClick()} socketRef={socketRef} />
-              <TextArea
+              <Input
                 style={{ height: "30px" }}
                 placeholder="Nhập tin nhắn ..."
                 bordered={false}
                 onChange={(e) => setText(e.target.value)}
                 value={text}
                 onKeyDown={(e) => onEnterPress(e)}
+                type="text"
               >
                 {/* <td>
                   <img width="50px" src={image_url} />
                 </td> */}
-              </TextArea>
+              </Input>
               <BsFillCursorFill onClick={() => HandleOnClick()} />
               {/* onClick={()=> {
             getChatByOtherId();
