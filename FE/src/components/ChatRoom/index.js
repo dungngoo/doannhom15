@@ -103,18 +103,22 @@ export default function ChatRoom() {
   }, [chatIdRemove])
 
   useEffect(() => {
-
+    let lastMsg1 = message[message.length - 1];
+    console.log(lastMsg1);
     console.log(message);
     const m = message.filter(mes => mes.id === messageId);
     console.log(m);
     if (!m.length) return;
     m[0]["content"] = "Tin nhắn đã được thu hồi";
     setMessage((oldMsg) => [...oldMsg, m]);
+    console.log(lastMsg);
     m[0]["content"] = null;
+    if (m[0].id !== lastMsg1.id && lastMsg1.id !== undefined) return;
     setLastMsg((oldLastMsg) => ({
       ...oldLastMsg,
       [m[0].chatId]: "Tin nhắn đã được thu hồi",
     }));
+
 
   }, [messageId])
 
